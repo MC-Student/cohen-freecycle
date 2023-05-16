@@ -6,15 +6,11 @@ import java.awt.*;
 
 public class FreebiePostsFrame extends JFrame
 {
-    private final FreebiePostsView freebiePostsView;
-
     private final FreebiePostsController controller;
 
     @Inject
-    public FreebiePostsFrame(FreebiePostsView freebiePostsView,
-                             FreebiePostsController controller)
+    public FreebiePostsFrame(FreebiePostsController controller)
     {
-        this.freebiePostsView = freebiePostsView;
         this.controller = controller;
 
         setSize(800, 600);
@@ -24,12 +20,11 @@ public class FreebiePostsFrame extends JFrame
         JButton bGetPosts = new JButton("Get recent NYC posts");
         bGetPosts.setSize(25, 45);
 
-        JPanel postsPanel = new JPanel();
-        postsPanel.setLayout(new BorderLayout());
+        JTextArea postsList = new JTextArea();
 
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.add(bGetPosts, BorderLayout.PAGE_START);
-        mainPanel.add(postsPanel, BorderLayout.CENTER);
+        mainPanel.add(postsList, BorderLayout.CENTER);
 
         bGetPosts.addActionListener(e ->
         {
