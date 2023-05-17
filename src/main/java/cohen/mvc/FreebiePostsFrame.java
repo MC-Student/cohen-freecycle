@@ -47,7 +47,8 @@ public class FreebiePostsFrame extends JFrame
 
                 if (character == KeyEvent.VK_ENTER)
                 {
-                    if (!Objects.equals(userLat.getText(), "") & !Objects.equals(userLon.getText(), ""))
+                    if (!Objects.equals(userLat.getText(), "")
+                            & !Objects.equals(userLon.getText(), ""))
                     {
                         controller.refreshPosts(userLat.getText(), userLon.getText());
                         requestFocus();
@@ -77,7 +78,8 @@ public class FreebiePostsFrame extends JFrame
 
                 if (character == KeyEvent.VK_ENTER)
                 {
-                    if (!Objects.equals(userLat.getText(), "") & !Objects.equals(userLon.getText(), ""))
+                    if (!Objects.equals(userLat.getText(), "")
+                            & !Objects.equals(userLon.getText(), ""))
                     {
                         controller.refreshPosts(userLat.getText(), userLon.getText());
                         requestFocus();
@@ -100,10 +102,10 @@ public class FreebiePostsFrame extends JFrame
         userLon.setFocusable(true);
         userLon.requestFocus();
 
-        JButton bGetPosts = new JButton("Get recent posts");
-        bGetPosts.setSize(25, 45);
+        JButton postsButton = new JButton("Get recent posts");
+        postsButton.setSize(25, 45);
 
-        JPanel paramPanel = new JPanel(new GridLayout(2,2));
+        JPanel paramPanel = new JPanel(new GridLayout(2, 2));
         paramPanel.add(lat);
         paramPanel.add(lon);
         paramPanel.add(userLat);
@@ -111,7 +113,7 @@ public class FreebiePostsFrame extends JFrame
 
         JPanel topPanel = new JPanel(new BorderLayout());
         topPanel.add(paramPanel, BorderLayout.CENTER);
-        topPanel.add(bGetPosts, BorderLayout.EAST);
+        topPanel.add(postsButton, BorderLayout.EAST);
 
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.add(topPanel, BorderLayout.PAGE_START);
@@ -121,7 +123,7 @@ public class FreebiePostsFrame extends JFrame
         // link image to url to open in browser
         //TODO: JList - for side menu list of posts
 
-        bGetPosts.addActionListener(e ->
+        postsButton.addActionListener(e ->
         {
             if (!Objects.equals(userLat.getText(), "") & !Objects.equals(userLon.getText(), ""))
             {
