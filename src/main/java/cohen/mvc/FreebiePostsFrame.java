@@ -24,11 +24,9 @@ public class FreebiePostsFrame extends JFrame
         JButton bGetPosts = new JButton("Get recent NYC posts");
         bGetPosts.setSize(25, 45);
 
-        JTextArea postsList = new JTextArea();
-
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.add(bGetPosts, BorderLayout.PAGE_START);
-        mainPanel.add(postsList, BorderLayout.CENTER);
+        mainPanel.add(postList, BorderLayout.CENTER);
 
         bGetPosts.addActionListener(e ->
         {
