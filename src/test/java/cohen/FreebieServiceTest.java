@@ -24,7 +24,7 @@ public class FreebieServiceTest
 
         //latitude=40.776676 longitude=-73.971321
         //when
-        PostListInfo postListInfo = service.getPostList("40.776676","-73.971321").blockingFirst();
+        PostListInfo postListInfo = service.getPostList("40.776676", "-73.971321").blockingFirst();
         //then
         assertNotNull(postListInfo);
         assertNotEquals(0, postListInfo.getPosts().size());
