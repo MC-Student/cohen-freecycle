@@ -7,6 +7,10 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import javax.inject.Named;
+import javax.inject.Singleton;
+import javax.swing.*;
+
 @Module
 public class FreebieServiceModule
 {
@@ -20,5 +24,13 @@ public class FreebieServiceModule
                 .build();
         FreebieService service = retrofit.create(FreebieService.class);
         return service;
+    }
+
+    @Provides
+    @Named("postList")
+    @Singleton
+    public JTextArea providesPostList()
+    {
+        return new JTextArea();
     }
 }

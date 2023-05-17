@@ -6,6 +6,7 @@ import cohen.json.Post;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.swing.*;
 import java.util.List;
 
@@ -15,7 +16,8 @@ public class FreebiePostsController
     private FreebieService service;
 
     @Inject
-    public FreebiePostsController(FreebieService service, JTextArea postList)
+    public FreebiePostsController(FreebieService service,
+                                  @Named ("postList") JTextArea postList)
     {
         this.service = service;
         this.postList = postList;

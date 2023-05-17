@@ -1,17 +1,21 @@
 package cohen.mvc;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.swing.*;
 import java.awt.*;
 
 public class FreebiePostsFrame extends JFrame
 {
     private final FreebiePostsController controller;
+    private JTextArea postList;
 
     @Inject
-    public FreebiePostsFrame(FreebiePostsController controller)
+    public FreebiePostsFrame(FreebiePostsController controller,
+                             @Named("postList") JTextArea postList)
     {
         this.controller = controller;
+        this.postList = postList;
 
         setSize(800, 600);
         setTitle("Freebie Posts");
