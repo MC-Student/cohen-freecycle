@@ -1,6 +1,7 @@
 package cohen.mvc;
 
 import cohen.FreebieService;
+import cohen.json.Post;
 import cohen.json.PostListInfo;
 import hu.akarnokd.rxjava3.swing.RxSwingPlugins;
 import io.reactivex.rxjava3.core.Observable;
@@ -26,8 +27,8 @@ public class FreebiePostsControllerTest
     {
         //given
         FreebieService service = mock();
-        JTextArea postList = mock();
-        FreebiePostsController controller = new FreebiePostsController(service, postList);
+        JList<String> posts = mock();
+        FreebiePostsController controller = new FreebiePostsController(service, posts);
         PostListInfo postListInfo = mock();
         Observable<PostListInfo> observableList = Observable.just(postListInfo);
         doReturn(observableList).when(service).getPostList("40.776676", "-73.971321");

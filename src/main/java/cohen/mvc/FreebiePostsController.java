@@ -13,15 +13,15 @@ import java.util.List;
 
 public class FreebiePostsController
 {
-    private JTextArea postList;
+    private JList<String> postTitles;
     private FreebieService service;
 
     @Inject
     public FreebiePostsController(FreebieService service,
-                                  @Named("postList") JTextArea postList)
+                                  @Named("postTitles") JList<String> postTitles)
     {
         this.service = service;
-        this.postList = postList;
+        this.postTitles = postTitles;
     }
 
     public void refreshPosts(String lat, String lon)
@@ -34,19 +34,24 @@ public class FreebiePostsController
 
     public void setPostList(PostListInfo postListInfo)
     {
-        List<Post> posts = postListInfo.getPosts();
-        if (posts.isEmpty())
+        List<Post> origPosts = postListInfo.getPosts();
+
+        postTitles.setListData((String[]) null);
+
+        if (origPosts.isEmpty())
         {
-            postList.removeAll();
-            postList.append("There are no posts in this area. Try a different location!");
+            postTitles.add(new JLabel("Empty"));
         }
         else
         {
-            for (Post post : posts)
+            String[] titlesArray = new String[origPosts.size()];
+
+            for (int i = 0; i < titlesArray.length; i++)
             {
-                String description = post.getContent();
-                postList.append(description + "\n");
+                titlesArray[i] = origPosts.get(i).getTitle();
             }
+
+            postTitles.setListData(titlesArray);
         }
     }
 }

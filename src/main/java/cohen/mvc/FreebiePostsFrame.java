@@ -1,5 +1,7 @@
 package cohen.mvc;
 
+import cohen.json.Post;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.swing.*;
@@ -11,16 +13,14 @@ import java.util.Objects;
 public class FreebiePostsFrame extends JFrame
 {
     private final FreebiePostsController controller;
-    private JTextArea postList;
+    private JList<String> postTitles;
 
     @Inject
     public FreebiePostsFrame(FreebiePostsController controller,
-                             @Named("postList") JTextArea postList)
+                             @Named("postTitles") JList<String> postTitles)
     {
         this.controller = controller;
-        this.postList = postList;
-
-        postList.setEditable(false);
+        this.postTitles = postTitles;
 
         setSize(800, 600);
         setTitle("Freebie Posts");
@@ -50,7 +50,6 @@ public class FreebiePostsFrame extends JFrame
                             & !Objects.equals(userLon.getText(), ""))
                     {
                         controller.refreshPosts(userLat.getText(), userLon.getText());
-                        requestFocus();
                     }
                 }
             }
@@ -116,7 +115,7 @@ public class FreebiePostsFrame extends JFrame
 
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.add(topPanel, BorderLayout.PAGE_START);
-        mainPanel.add(postList, BorderLayout.CENTER);
+        mainPanel.add(postTitles, BorderLayout.WEST);
 
         //TODO: Add fields for lat/lon, display image, title, and description of post,
         // link image to url to open in browser

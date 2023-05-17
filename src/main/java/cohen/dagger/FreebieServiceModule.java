@@ -1,6 +1,7 @@
 package cohen.dagger;
 
 import cohen.FreebieService;
+import cohen.json.Post;
 import dagger.Module;
 import dagger.Provides;
 import retrofit2.Retrofit;
@@ -27,10 +28,10 @@ public class FreebieServiceModule
     }
 
     @Provides
-    @Named("postList")
+    @Named("postTitles")
     @Singleton
-    public JTextArea providesPostList()
+    public JList<String> providesPostTitles()
     {
-        return new JTextArea();
+        return new JList<>();
     }
 }
