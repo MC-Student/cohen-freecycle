@@ -1,36 +1,31 @@
-package cohen.dagger;
+package cohen;
 
-import cohen.FreebieService;
-import dagger.Module;
-import dagger.Provides;
+import cohen.json.PostListInfo;
+import org.junit.jupiter.api.Test;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-import javax.inject.Named;
-import javax.inject.Singleton;
-import javax.swing.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-@Module
-public class FreebieServiceModule
+public class FreebieServiceTest
 {
-    @Provides
-    public FreebieService providesFreebieService()
+
+    @Test
+    public void getPostList()
     {
+        //given
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://trashnothing.com/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
                 .build();
         FreebieService service = retrofit.create(FreebieService.class);
-        return service;
-    }
 
-    @Provides
-    @Named("postList")
-    @Singleton
-    public JTextArea providesPostList()
-    {
-        return new JTextArea();
+        //when
+        PostListInfo postListInfo = service.getPostList().blockingFirst();
+        //then
+        assertNotNull(postListInfo);
+        assertNotEquals(0, postListInfo.getPosts().size());
     }
 }

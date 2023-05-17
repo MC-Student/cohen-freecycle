@@ -1,21 +1,21 @@
 package cohen.mvc;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.swing.*;
 import java.awt.*;
 
 public class FreebiePostsFrame extends JFrame
 {
-    private final FreebiePostsView freebiePostsView;
-
     private final FreebiePostsController controller;
+    private JTextArea postList;
 
     @Inject
-    public FreebiePostsFrame(FreebiePostsView freebiePostsView,
-                             FreebiePostsController controller)
+    public FreebiePostsFrame(FreebiePostsController controller,
+                             @Named("postList") JTextArea postList)
     {
-        this.freebiePostsView = freebiePostsView;
         this.controller = controller;
+        this.postList = postList;
 
         setSize(800, 600);
         setTitle("Freebie Posts");
@@ -24,12 +24,9 @@ public class FreebiePostsFrame extends JFrame
         JButton bGetPosts = new JButton("Get recent NYC posts");
         bGetPosts.setSize(25, 45);
 
-        JPanel postsPanel = new JPanel();
-        postsPanel.setLayout(new BorderLayout());
-
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.add(bGetPosts, BorderLayout.PAGE_START);
-        mainPanel.add(postsPanel, BorderLayout.CENTER);
+        mainPanel.add(postList, BorderLayout.CENTER);
 
         bGetPosts.addActionListener(e ->
         {

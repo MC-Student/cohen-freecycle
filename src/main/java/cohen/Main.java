@@ -2,6 +2,7 @@ package cohen;
 
 import cohen.dagger.FreebieComponent;
 import cohen.mvc.FreebiePostsFrame;
+import cohen.dagger.DaggerFreebieComponent;
 
 public class Main
 {
