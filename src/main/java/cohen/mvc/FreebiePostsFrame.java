@@ -4,7 +4,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Objects;
@@ -125,7 +124,7 @@ public class FreebiePostsFrame extends JFrame
 
         postsButton.addActionListener(e ->
         {
-            if (!Objects.equals(userLat.getText(), "") & !Objects.equals(userLon.getText(), ""))
+            if (userLat.getText().length() > 0 & userLon.getText().length() > 0)
             {
                 controller.refreshPosts(userLat.getText(), userLon.getText());
                 requestFocus();

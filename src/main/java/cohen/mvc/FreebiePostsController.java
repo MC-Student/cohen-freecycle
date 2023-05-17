@@ -3,6 +3,7 @@ package cohen.mvc;
 import cohen.FreebieService;
 import cohen.json.PostListInfo;
 import cohen.json.Post;
+import hu.akarnokd.rxjava3.swing.SwingSchedulers;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 import javax.inject.Inject;
@@ -27,7 +28,7 @@ public class FreebiePostsController
     {
         service.getPostList(lat, lon)
                 .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.newThread())
+                .observeOn(SwingSchedulers.edt())
                 .subscribe(this::setPostList, Throwable::printStackTrace);
     }
 

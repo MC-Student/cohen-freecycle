@@ -2,6 +2,7 @@ package cohen.mvc;
 
 import cohen.FreebieService;
 import cohen.json.PostListInfo;
+import hu.akarnokd.rxjava3.swing.RxSwingPlugins;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.plugins.RxJavaPlugins;
 import io.reactivex.rxjava3.schedulers.Schedulers;
@@ -17,7 +18,7 @@ public class FreebiePostsControllerTest
     static
     {
         RxJavaPlugins.setIoSchedulerHandler(scheduler -> Schedulers.trampoline());
-        RxJavaPlugins.setNewThreadSchedulerHandler(scheduler -> Schedulers.trampoline());
+        RxSwingPlugins.setOnEdtScheduler(scheduler -> Schedulers.trampoline());
     }
 
     @Test
