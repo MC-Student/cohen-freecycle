@@ -25,7 +25,8 @@ public class FreebiePostsController
 
     public void refreshPosts()
     {
-        service.getPostList()
+        //TODO: Get input for lat/lon from user
+        service.getPostList("40.776676","-73.971321")
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.newThread())
                 .subscribe(this::setPostList, Throwable::printStackTrace);

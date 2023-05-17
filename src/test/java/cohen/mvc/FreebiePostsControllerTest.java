@@ -29,12 +29,12 @@ public class FreebiePostsControllerTest
         FreebiePostsController controller = new FreebiePostsController(service, postList);
         PostListInfo postListInfo = mock();
         Observable<PostListInfo> observableList = Observable.just(postListInfo);
-        doReturn(observableList).when(service).getPostList();
+        doReturn(observableList).when(service).getPostList("40.776676","-73.971321");
 
         //when
         controller.refreshPosts();
 
         //then
-        verify(service).getPostList();
+        verify(service).getPostList("40.776676","-73.971321");
     }
 }

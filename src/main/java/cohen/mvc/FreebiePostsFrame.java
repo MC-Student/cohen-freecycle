@@ -28,6 +28,10 @@ public class FreebiePostsFrame extends JFrame
         mainPanel.add(bGetPosts, BorderLayout.PAGE_START);
         mainPanel.add(postList, BorderLayout.CENTER);
 
+        //TODO: Add fields for lat/lon, display image, title, and description of post,
+        // link image to url to open in browser
+        //TODO: JList - for side menu list of posts
+
         bGetPosts.addActionListener(e ->
         {
             controller.refreshPosts();
