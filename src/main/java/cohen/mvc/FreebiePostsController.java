@@ -17,16 +17,15 @@ public class FreebiePostsController
 
     @Inject
     public FreebiePostsController(FreebieService service,
-                                  @Named ("postList") JTextArea postList)
+                                  @Named("postList") JTextArea postList)
     {
         this.service = service;
         this.postList = postList;
     }
 
-    public void refreshPosts()
+    public void refreshPosts(String lat, String lon)
     {
-        //TODO: Get input for lat/lon from user
-        service.getPostList("40.776676", "-73.971321")
+        service.getPostList(lat, lon)
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.newThread())
                 .subscribe(this::setPostList, Throwable::printStackTrace);
@@ -35,10 +34,18 @@ public class FreebiePostsController
     public void setPostList(PostListInfo postListInfo)
     {
         List<Post> posts = postListInfo.getPosts();
-        for (Post post : posts)
+        if (posts.isEmpty())
         {
-            String description = post.getContent();
-            postList.append(description + "\n");
+            postList.removeAll();
+            postList.append("There are no posts in this area. Try a different location!");
+        }
+        else
+        {
+            for (Post post : posts)
+            {
+                String description = post.getContent();
+                postList.append(description + "\n");
+            }
         }
     }
 }

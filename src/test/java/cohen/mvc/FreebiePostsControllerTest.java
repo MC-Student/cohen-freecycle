@@ -32,7 +32,7 @@ public class FreebiePostsControllerTest
         doReturn(observableList).when(service).getPostList("40.776676", "-73.971321");
 
         //when
-        controller.refreshPosts();
+        controller.refreshPosts("40.776676", "-73.971321");
 
         //then
         verify(service).getPostList("40.776676", "-73.971321");
