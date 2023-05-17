@@ -5,6 +5,8 @@ import cohen.json.Post;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -17,7 +19,9 @@ public class FreebiePostsFrame extends JFrame
 
     @Inject
     public FreebiePostsFrame(FreebiePostsController controller,
-                             @Named("postTitles") JList<String> postTitles)
+                             @Named("postTitles") JList<String> postTitles,
+                             @Named("title") JLabel title,
+                             @Named("description") JLabel description)
     {
         this.controller = controller;
         this.postTitles = postTitles;
@@ -46,8 +50,7 @@ public class FreebiePostsFrame extends JFrame
 
                 if (character == KeyEvent.VK_ENTER)
                 {
-                    if (!Objects.equals(userLat.getText(), "")
-                            & !Objects.equals(userLon.getText(), ""))
+                    if (userLat.getText().length() > 0 & userLon.getText().length() > 0)
                     {
                         controller.refreshPosts(userLat.getText(), userLon.getText());
                     }
@@ -76,8 +79,7 @@ public class FreebiePostsFrame extends JFrame
 
                 if (character == KeyEvent.VK_ENTER)
                 {
-                    if (!Objects.equals(userLat.getText(), "")
-                            & !Objects.equals(userLon.getText(), ""))
+                    if (userLat.getText().length() > 0 & userLon.getText().length() > 0)
                     {
                         controller.refreshPosts(userLat.getText(), userLon.getText());
                         requestFocus();
@@ -113,13 +115,32 @@ public class FreebiePostsFrame extends JFrame
         topPanel.add(paramPanel, BorderLayout.CENTER);
         topPanel.add(postsButton, BorderLayout.EAST);
 
+        JPanel individualPost = new JPanel(new FlowLayout());
+        individualPost.add(title, FlowLayout.CENTER);
+        individualPost.add(description, FlowLayout.CENTER);
+
+        ListSelectionModel listSelectionModel = postTitles.getSelectionModel();
+        listSelectionModel.addListSelectionListener(new ListSelectionListener()
+        {
+            @Override
+            public void valueChanged(ListSelectionEvent e)
+            {
+                if(!e.getValueIsAdjusting())
+                {
+                    int postSelected = e.getLastIndex();
+                    title.setText(); //have to read in the list of posts so can get this info also
+                    description.setText();//same here
+                    //TODO: this ^
+                }
+            }
+        });
+
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.add(topPanel, BorderLayout.PAGE_START);
         mainPanel.add(postTitles, BorderLayout.WEST);
 
         //TODO: Add fields for lat/lon, display image, title, and description of post,
         // link image to url to open in browser
-        //TODO: JList - for side menu list of posts
 
         postsButton.addActionListener(e ->
         {

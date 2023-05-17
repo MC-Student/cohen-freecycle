@@ -34,4 +34,14 @@ public class FreebieServiceModule
     {
         return new JList<>();
     }
+
+    @Provides
+    @Named("title")
+    @Singleton
+    public JLabel providesTitle(){return new JLabel();}
+
+    @Provides
+    @Named("description")
+    @Singleton
+    public JLabel providesDescription(){return new JLabel();}
 }
