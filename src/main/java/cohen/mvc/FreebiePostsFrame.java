@@ -10,21 +10,29 @@ import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.Objects;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FreebiePostsFrame extends JFrame
 {
     private final FreebiePostsController controller;
+    private final List<Post> allPosts;
     private JList<String> postTitles;
+    private JLabel title;
+    private JLabel description;
 
     @Inject
     public FreebiePostsFrame(FreebiePostsController controller,
+                             @Named("allPosts") ArrayList<Post> allPosts,
                              @Named("postTitles") JList<String> postTitles,
                              @Named("title") JLabel title,
                              @Named("description") JLabel description)
     {
         this.controller = controller;
+        this.allPosts = allPosts;
         this.postTitles = postTitles;
+        this.title = title;
+        this.description = description;
 
         setSize(800, 600);
         setTitle("Freebie Posts");
@@ -115,9 +123,9 @@ public class FreebiePostsFrame extends JFrame
         topPanel.add(paramPanel, BorderLayout.CENTER);
         topPanel.add(postsButton, BorderLayout.EAST);
 
-        JPanel individualPost = new JPanel(new FlowLayout());
-        individualPost.add(title, FlowLayout.CENTER);
-        individualPost.add(description, FlowLayout.CENTER);
+        JPanel individualPost = new JPanel(new GridLayout(3, 1));
+        individualPost.add(title);
+        individualPost.add(description);
 
         ListSelectionModel listSelectionModel = postTitles.getSelectionModel();
         listSelectionModel.addListSelectionListener(new ListSelectionListener()
@@ -125,12 +133,12 @@ public class FreebiePostsFrame extends JFrame
             @Override
             public void valueChanged(ListSelectionEvent e)
             {
-                if(!e.getValueIsAdjusting())
+                if (!e.getValueIsAdjusting())
                 {
                     int postSelected = e.getLastIndex();
-                    title.setText(); //have to read in the list of posts so can get this info also
-                    description.setText();//same here
-                    //TODO: this ^
+                    controller.refreshPosts(userLat.getText(), userLon.getText());
+                    title.setText(allPosts.get(postSelected).getTitle()); //have to read in the list of posts so can get this info also
+                    description.setText(allPosts.get(postSelected).getContent());//same here
                 }
             }
         });
@@ -138,9 +146,6 @@ public class FreebiePostsFrame extends JFrame
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.add(topPanel, BorderLayout.PAGE_START);
         mainPanel.add(postTitles, BorderLayout.WEST);
-
-        //TODO: Add fields for lat/lon, display image, title, and description of post,
-        // link image to url to open in browser
 
         postsButton.addActionListener(e ->
         {
@@ -156,3 +161,6 @@ public class FreebiePostsFrame extends JFrame
         setContentPane(mainPanel);
     }
 }
+
+//TODO: Add fields for lat/lon, display image, title, and description of post,
+// link image to url to open in browser

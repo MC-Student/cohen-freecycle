@@ -9,19 +9,28 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.swing.*;
-import java.util.List;
+import java.util.ArrayList;
 
 public class FreebiePostsController
 {
     private JList<String> postTitles;
     private FreebieService service;
+    private JLabel title;
+    private JLabel description;
+    private ArrayList<Post> allPosts;
 
     @Inject
     public FreebiePostsController(FreebieService service,
-                                  @Named("postTitles") JList<String> postTitles)
+                                  @Named("title") JLabel title,
+                                  @Named("description") JLabel description,
+                                  @Named("postTitles") JList<String> postTitles,
+                                  @Named("allPosts") ArrayList<Post> allPosts)
     {
         this.service = service;
+        this.title = title;
+        this.description = description;
         this.postTitles = postTitles;
+        this.allPosts = allPosts;
     }
 
     public void refreshPosts(String lat, String lon)
@@ -29,29 +38,32 @@ public class FreebiePostsController
         service.getPostList(lat, lon)
                 .subscribeOn(Schedulers.io())
                 .observeOn(SwingSchedulers.edt())
-                .subscribe(this::setPostList, Throwable::printStackTrace);
+                .subscribe(this::setPosts, Throwable::printStackTrace);
     }
 
-    public void setPostList(PostListInfo postListInfo)
+    public void setPosts(PostListInfo postListInfo)
     {
-        List<Post> origPosts = postListInfo.getPosts();
+        allPosts = (ArrayList<Post>) postListInfo.getPosts();
 
         postTitles.setListData((String[]) null);
 
-        if (origPosts.isEmpty())
+        if (allPosts.isEmpty())
         {
             postTitles.add(new JLabel("Empty"));
         }
         else
         {
-            String[] titlesArray = new String[origPosts.size()];
+            String[] titlesArray = new String[allPosts.size()];
 
             for (int i = 0; i < titlesArray.length; i++)
             {
-                titlesArray[i] = origPosts.get(i).getTitle();
+                titlesArray[i] = allPosts.get(i).getTitle();
             }
 
             postTitles.setListData(titlesArray);
+
+            title.setText(allPosts.get(0).getTitle());
+            description.setText(allPosts.get(0).getContent());
         }
     }
 }

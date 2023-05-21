@@ -11,6 +11,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import javax.inject.Named;
 import javax.inject.Singleton;
 import javax.swing.*;
+import java.util.*;
 
 @Module
 public class FreebieServiceModule
@@ -34,6 +35,11 @@ public class FreebieServiceModule
     {
         return new JList<>();
     }
+
+    @Provides
+    @Named("allPosts")
+    @Singleton
+    public ArrayList<Post> providesAllPosts(){return new ArrayList<>();}
 
     @Provides
     @Named("title")

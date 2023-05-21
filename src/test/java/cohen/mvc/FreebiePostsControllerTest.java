@@ -11,6 +11,8 @@ import org.junit.jupiter.api.Test;
 
 import javax.swing.*;
 
+import java.util.ArrayList;
+
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.verify;
 
@@ -27,8 +29,11 @@ public class FreebiePostsControllerTest
     {
         //given
         FreebieService service = mock();
-        JList<String> posts = mock();
-        FreebiePostsController controller = new FreebiePostsController(service, posts);
+        ArrayList<Post> allPosts = mock();
+        JList<String> postTitles = mock();
+        JLabel title = mock();
+        JLabel description = mock();
+        FreebiePostsController controller = new FreebiePostsController(service, title, description, postTitles, allPosts);
         PostListInfo postListInfo = mock();
         Observable<PostListInfo> observableList = Observable.just(postListInfo);
         doReturn(observableList).when(service).getPostList("40.776676", "-73.971321");
