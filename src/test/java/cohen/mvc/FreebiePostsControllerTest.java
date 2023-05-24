@@ -33,15 +33,15 @@ public class FreebiePostsControllerTest
         JList<String> postTitles = mock();
         JLabel title = mock();
         JLabel description = mock();
-        FreebiePostsController controller = new FreebiePostsController(service, title, description, postTitles, allPosts);
+        FreebiePostsController controller = new FreebiePostsController(service, title, description, postTitles);
         PostListInfo postListInfo = mock();
         Observable<PostListInfo> observableList = Observable.just(postListInfo);
-        doReturn(observableList).when(service).getPostList("40.776676", "-73.971321");
+        doReturn(observableList).when(service).getPostList("40.776676", "-73.971321", "2023-05-01T18%3A30%3A16");
 
         //when
-        controller.refreshPosts("40.776676", "-73.971321");
+        controller.refreshPosts("40.776676", "-73.971321", "2023-05-01T18%3A30%3A16");
 
         //then
-        verify(service).getPostList("40.776676", "-73.971321");
+        verify(service).getPostList("40.776676", "-73.971321", "2023-05-01T18%3A30%3A16");
     }
 }

@@ -13,29 +13,27 @@ import java.util.ArrayList;
 
 public class FreebiePostsController
 {
-    private JList<String> postTitles;
-    private FreebieService service;
-    private JLabel title;
-    private JLabel description;
+    private final JList<String> postTitles;
+    private final FreebieService service;
+    private final JLabel title;
+    private final JLabel description;
     private ArrayList<Post> allPosts;
 
     @Inject
     public FreebiePostsController(FreebieService service,
                                   @Named("title") JLabel title,
                                   @Named("description") JLabel description,
-                                  @Named("postTitles") JList<String> postTitles,
-                                  @Named("allPosts") ArrayList<Post> allPosts)
+                                  @Named("postTitles") JList<String> postTitles)
     {
         this.service = service;
         this.title = title;
         this.description = description;
         this.postTitles = postTitles;
-        this.allPosts = allPosts;
     }
 
-    public void refreshPosts(String lat, String lon)
+    public void refreshPosts(String lat, String lon, String date)
     {
-        service.getPostList(lat, lon)
+        service.getPostList(lat, lon, date)
                 .subscribeOn(Schedulers.io())
                 .observeOn(SwingSchedulers.edt())
                 .subscribe(this::setPosts, Throwable::printStackTrace);
@@ -44,8 +42,6 @@ public class FreebiePostsController
     public void setPosts(PostListInfo postListInfo)
     {
         allPosts = (ArrayList<Post>) postListInfo.getPosts();
-
-        postTitles.setListData((String[]) null);
 
         if (allPosts.isEmpty())
         {
@@ -64,6 +60,13 @@ public class FreebiePostsController
 
             title.setText(allPosts.get(0).getTitle());
             description.setText(allPosts.get(0).getContent());
+
         }
+    }
+
+    public void updatePost(int postSelected)
+    {
+        title.setText(allPosts.get(postSelected).getTitle()); //have to read in the list of posts so can get this info also
+        description.setText(allPosts.get(postSelected).getContent());//same here
     }
 }

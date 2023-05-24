@@ -39,15 +39,24 @@ public class FreebieServiceModule
     @Provides
     @Named("allPosts")
     @Singleton
-    public ArrayList<Post> providesAllPosts(){return new ArrayList<>();}
+    public ArrayList<Post> providesAllPosts()
+    {
+        return new ArrayList<>();
+    }
 
     @Provides
     @Named("title")
     @Singleton
-    public JLabel providesTitle(){return new JLabel();}
+    public JLabel providesTitle()
+    {
+        return new JLabel();
+    }
 
     @Provides
     @Named("description")
     @Singleton
-    public JLabel providesDescription(){return new JLabel();}
+    public JLabel providesDescription()
+    {
+        return new JLabel();
+    }
 }

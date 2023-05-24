@@ -1,7 +1,5 @@
 package cohen.mvc;
 
-import cohen.json.Post;
-
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.swing.*;
@@ -10,26 +8,25 @@ import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.ArrayList;
-import java.util.List;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 public class FreebiePostsFrame extends JFrame
 {
-    private final FreebiePostsController controller;
-    private final List<Post> allPosts;
-    private JList<String> postTitles;
-    private JLabel title;
-    private JLabel description;
+    private final JList<String> postTitles;
+    private final JLabel title;
+    private final JLabel description;
+
+    private final JTextField userLat;
+    private final JTextField userLon;
+    private final JFormattedTextField userDate;
 
     @Inject
     public FreebiePostsFrame(FreebiePostsController controller,
-                             @Named("allPosts") ArrayList<Post> allPosts,
                              @Named("postTitles") JList<String> postTitles,
                              @Named("title") JLabel title,
                              @Named("description") JLabel description)
     {
-        this.controller = controller;
-        this.allPosts = allPosts;
         this.postTitles = postTitles;
         this.title = title;
         this.description = description;
@@ -38,15 +35,22 @@ public class FreebiePostsFrame extends JFrame
         setTitle("Freebie Posts");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
+        JLabel dateTime = new JLabel("Minimum date (YYYY-MM-DD)");
+        dateTime.setHorizontalAlignment(SwingConstants.CENTER);
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        userDate = new JFormattedTextField(df);
+        userDate.setText("2023-05-17");
+        userDate.setHorizontalAlignment(SwingConstants.CENTER);
+
         JLabel lat = new JLabel("Latitude");
         lat.setHorizontalAlignment(SwingConstants.CENTER);
-        JTextField userLat = new JTextField();
+        userLat = new JTextField();
         userLat.setText("40.776676");
         userLat.setHorizontalAlignment(SwingConstants.CENTER);
 
         JLabel lon = new JLabel("Longitude");
         lon.setHorizontalAlignment(SwingConstants.CENTER);
-        JTextField userLon = new JTextField();
+        userLon = new JTextField();
         userLon.setText("-73.971321");
         userLon.setHorizontalAlignment(SwingConstants.CENTER);
         userLat.addKeyListener(new KeyListener()
@@ -58,9 +62,10 @@ public class FreebiePostsFrame extends JFrame
 
                 if (character == KeyEvent.VK_ENTER)
                 {
-                    if (userLat.getText().length() > 0 & userLon.getText().length() > 0)
+                    if (allInputComplete())
                     {
-                        controller.refreshPosts(userLat.getText(), userLon.getText());
+                        controller.refreshPosts(userLat.getText(), userLon.getText(), getUTCDateParam());
+                        requestFocus();
                     }
                 }
             }
@@ -75,8 +80,6 @@ public class FreebiePostsFrame extends JFrame
             {
             }
         });
-        userLat.setFocusable(true);
-        userLat.requestFocus();
 
         userLon.addKeyListener(new KeyListener()
         {
@@ -87,9 +90,9 @@ public class FreebiePostsFrame extends JFrame
 
                 if (character == KeyEvent.VK_ENTER)
                 {
-                    if (userLat.getText().length() > 0 & userLon.getText().length() > 0)
+                    if (allInputComplete())
                     {
-                        controller.refreshPosts(userLat.getText(), userLon.getText());
+                        controller.refreshPosts(userLat.getText(), userLon.getText(), getUTCDateParam());
                         requestFocus();
                     }
                 }
@@ -107,17 +110,56 @@ public class FreebiePostsFrame extends JFrame
 
             }
         });
-        userLon.setFocusable(true);
-        userLon.requestFocus();
 
-        JButton postsButton = new JButton("Get recent posts");
+        userDate.addKeyListener(new KeyListener()
+        {
+            @Override
+            public void keyTyped(KeyEvent e)
+            {
+                char character = e.getKeyChar();
+
+                if (character == KeyEvent.VK_ENTER)
+                {
+                    if (allInputComplete())
+                    {
+                        controller.refreshPosts(userLat.getText(), userLon.getText(), getUTCDateParam());
+                        requestFocus();
+                    }
+                }
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e)
+            {
+
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e)
+            {
+
+            }
+        });
+
+        JButton postsButton = new JButton("View posts");
         postsButton.setSize(25, 45);
 
-        JPanel paramPanel = new JPanel(new GridLayout(2, 2));
+        postsButton.addActionListener(e ->
+        {
+            if (allInputComplete())
+            {
+                controller.refreshPosts(userLat.getText(), userLon.getText(), getUTCDateParam());
+                requestFocus();
+            }
+        });
+
+        JPanel paramPanel = new JPanel(new GridLayout(2, 3));
         paramPanel.add(lat);
         paramPanel.add(lon);
+        paramPanel.add(dateTime);
         paramPanel.add(userLat);
         paramPanel.add(userLon);
+        paramPanel.add(userDate);
 
         JPanel topPanel = new JPanel(new BorderLayout());
         topPanel.add(paramPanel, BorderLayout.CENTER);
@@ -136,9 +178,7 @@ public class FreebiePostsFrame extends JFrame
                 if (!e.getValueIsAdjusting())
                 {
                     int postSelected = e.getLastIndex();
-                    controller.refreshPosts(userLat.getText(), userLon.getText());
-                    title.setText(allPosts.get(postSelected).getTitle()); //have to read in the list of posts so can get this info also
-                    description.setText(allPosts.get(postSelected).getContent());//same here
+                    controller.updatePost(postSelected);
                 }
             }
         });
@@ -146,19 +186,21 @@ public class FreebiePostsFrame extends JFrame
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.add(topPanel, BorderLayout.PAGE_START);
         mainPanel.add(postTitles, BorderLayout.WEST);
+        mainPanel.add(individualPost, BorderLayout.CENTER);
 
-        postsButton.addActionListener(e ->
-        {
-            if (userLat.getText().length() > 0 & userLon.getText().length() > 0)
-            {
-                controller.refreshPosts(userLat.getText(), userLon.getText());
-                requestFocus();
-            }
-        });
-
-        controller.refreshPosts(userLat.getText(), userLon.getText());
+        controller.refreshPosts(userLat.getText(), userLon.getText(), getUTCDateParam());
 
         setContentPane(mainPanel);
+    }
+
+    private String getUTCDateParam()
+    {
+        return userDate.getText() + "T00%3A00%3A00";
+    }
+
+    private boolean allInputComplete()
+    {
+        return !userLat.getText().isBlank() & !userLon.getText().isBlank() & !userDate.getText().isBlank();
     }
 }
 
