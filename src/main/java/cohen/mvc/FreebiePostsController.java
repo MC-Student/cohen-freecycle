@@ -41,7 +41,7 @@ public class FreebiePostsController
 
     public void setPosts(PostListInfo postListInfo)
     {
-        allPosts = (ArrayList<Post>) postListInfo.getPosts();
+        allPosts = postListInfo.getPosts();
 
         if (allPosts.isEmpty())
         {

@@ -11,8 +11,6 @@ import org.junit.jupiter.api.Test;
 
 import javax.swing.*;
 
-import java.util.ArrayList;
-
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.verify;
 
@@ -41,16 +39,16 @@ public class FreebiePostsControllerTest
         Observable<PostListInfo> observableList = Observable.just(postListInfo);
         doReturn(observableList).when(service).getPostList("40.776676",
                 "-73.971321",
-                "2023-05-01T18%3A30%3A16");
+                "2023-05-24T00:00:00");
 
         //when
         controller.refreshPosts("40.776676",
                 "-73.971321",
-                "2023-05-01T18%3A30%3A16");
+                "2023-05-24T00:00:00");
 
         //then
         verify(service).getPostList("40.776676",
                 "-73.971321",
-                "2023-05-01T18%3A30%3A16");
+                "2023-05-24T00:00:00");
     }
 }
