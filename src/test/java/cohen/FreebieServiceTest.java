@@ -10,7 +10,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class FreebieServiceTest
 {
-
     @Test
     public void getPostList()
     {
@@ -22,9 +21,11 @@ public class FreebieServiceTest
                 .build();
         FreebieService service = retrofit.create(FreebieService.class);
 
-        //latitude=40.776676 longitude=-73.971321
         //when
-        PostListInfo postListInfo = service.getPostList("40.776676", "-73.971321", "2023-05-01T18%3A30%3A16").blockingFirst();
+        PostListInfo postListInfo = service.getPostList("40.776676",
+                "-73.971321",
+                "2023-05-01T18%3A30%3A16"
+        ).blockingFirst();
         //then
         assertNotNull(postListInfo);
         assertNotEquals(0, postListInfo.getPosts().size());

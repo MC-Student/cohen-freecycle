@@ -66,7 +66,7 @@ public class FreebiePostsController
 
     public void updatePost(int postSelected)
     {
-        title.setText(allPosts.get(postSelected).getTitle()); //have to read in the list of posts so can get this info also
-        description.setText(allPosts.get(postSelected).getContent());//same here
+        title.setText(allPosts.get(postSelected).getTitle());
+        description.setText(allPosts.get(postSelected).getContent());
     }
 }

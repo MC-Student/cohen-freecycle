@@ -13,10 +13,6 @@ import java.text.SimpleDateFormat;
 
 public class FreebiePostsFrame extends JFrame
 {
-    private final JList<String> postTitles;
-    private final JLabel title;
-    private final JLabel description;
-
     private final JTextField userLat;
     private final JTextField userLon;
     private final JFormattedTextField userDate;
@@ -27,9 +23,6 @@ public class FreebiePostsFrame extends JFrame
                              @Named("title") JLabel title,
                              @Named("description") JLabel description)
     {
-        this.postTitles = postTitles;
-        this.title = title;
-        this.description = description;
 
         setSize(800, 600);
         setTitle("Freebie Posts");
@@ -39,7 +32,7 @@ public class FreebiePostsFrame extends JFrame
         dateTime.setHorizontalAlignment(SwingConstants.CENTER);
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         userDate = new JFormattedTextField(df);
-        userDate.setText("2023-05-17");
+        userDate.setText("2023-05-24");
         userDate.setHorizontalAlignment(SwingConstants.CENTER);
 
         JLabel lat = new JLabel("Latitude");
@@ -64,7 +57,9 @@ public class FreebiePostsFrame extends JFrame
                 {
                     if (allInputComplete())
                     {
-                        controller.refreshPosts(userLat.getText(), userLon.getText(), getUTCDateParam());
+                        controller.refreshPosts(userLat.getText(),
+                                userLon.getText(),
+                                getUtcDateParam());
                         requestFocus();
                     }
                 }
@@ -92,7 +87,9 @@ public class FreebiePostsFrame extends JFrame
                 {
                     if (allInputComplete())
                     {
-                        controller.refreshPosts(userLat.getText(), userLon.getText(), getUTCDateParam());
+                        controller.refreshPosts(userLat.getText(),
+                                userLon.getText(),
+                                getUtcDateParam());
                         requestFocus();
                     }
                 }
@@ -122,7 +119,9 @@ public class FreebiePostsFrame extends JFrame
                 {
                     if (allInputComplete())
                     {
-                        controller.refreshPosts(userLat.getText(), userLon.getText(), getUTCDateParam());
+                        controller.refreshPosts(userLat.getText(),
+                                userLon.getText(),
+                                getUtcDateParam());
                         requestFocus();
                     }
                 }
@@ -148,7 +147,9 @@ public class FreebiePostsFrame extends JFrame
         {
             if (allInputComplete())
             {
-                controller.refreshPosts(userLat.getText(), userLon.getText(), getUTCDateParam());
+                controller.refreshPosts(userLat.getText(),
+                        userLon.getText(),
+                        getUtcDateParam());
                 requestFocus();
             }
         });
@@ -188,19 +189,21 @@ public class FreebiePostsFrame extends JFrame
         mainPanel.add(postTitles, BorderLayout.WEST);
         mainPanel.add(individualPost, BorderLayout.CENTER);
 
-        controller.refreshPosts(userLat.getText(), userLon.getText(), getUTCDateParam());
+        controller.refreshPosts(userLat.getText(), userLon.getText(), getUtcDateParam());
 
         setContentPane(mainPanel);
     }
 
-    private String getUTCDateParam()
+    private String getUtcDateParam()
     {
         return userDate.getText() + "T00%3A00%3A00";
     }
 
     private boolean allInputComplete()
     {
-        return !userLat.getText().isBlank() & !userLon.getText().isBlank() & !userDate.getText().isBlank();
+        return !userLat.getText().isBlank()
+                & !userLon.getText().isBlank()
+                & !userDate.getText().isBlank();
     }
 }
 
