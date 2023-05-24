@@ -47,6 +47,7 @@ public class FreebiePostsController
         {
             postTitles.add(new JLabel("Empty"));
         }
+
         else
         {
             String[] titlesArray = new String[allPosts.size()];

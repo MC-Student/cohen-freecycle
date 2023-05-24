@@ -10,6 +10,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 
 public class FreebiePostsFrame extends JFrame
 {
@@ -32,7 +33,7 @@ public class FreebiePostsFrame extends JFrame
         dateTime.setHorizontalAlignment(SwingConstants.CENTER);
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         userDate = new JFormattedTextField(df);
-        userDate.setText("2023-05-24");
+        userDate.setText(String.valueOf(LocalDate.now()));
         userDate.setHorizontalAlignment(SwingConstants.CENTER);
 
         JLabel lat = new JLabel("Latitude");
@@ -196,7 +197,7 @@ public class FreebiePostsFrame extends JFrame
 
     private String getUtcDateParam()
     {
-        return userDate.getText() + "T00%3A00%3A00";
+        return userDate.getText() + "T00:00:00";
     }
 
     private boolean allInputComplete()
