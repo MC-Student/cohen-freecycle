@@ -29,7 +29,7 @@ public class FreebiePostsControllerTest
         FreebieService service = mock();
         JList<String> postTitles = mock();
         JLabel title = mock();
-        JLabel description = mock();
+        JTextArea description = mock();
         FreebiePostsController controller = new FreebiePostsController(service,
                 title,
                 description,

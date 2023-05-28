@@ -55,7 +55,15 @@ public class FreebieServiceModule
     @Provides
     @Named("description")
     @Singleton
-    public JLabel providesDescription()
+    public JTextArea providesDescription()
+    {
+        return new JTextArea();
+    }
+
+    @Provides
+    @Named("photo")
+    @Singleton
+    public JLabel providesPhoto()
     {
         return new JLabel();
     }

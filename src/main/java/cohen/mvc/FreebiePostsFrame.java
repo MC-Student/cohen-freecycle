@@ -3,11 +3,17 @@ package cohen.mvc;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.swing.*;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.EtchedBorder;
+import javax.swing.border.StrokeBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.plaf.basic.BasicBorders;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.net.MalformedURLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -22,7 +28,8 @@ public class FreebiePostsFrame extends JFrame
     public FreebiePostsFrame(FreebiePostsController controller,
                              @Named("postTitles") JList<String> postTitles,
                              @Named("title") JLabel title,
-                             @Named("description") JLabel description)
+                             @Named("description") JTextArea description,
+                             @Named("photo") JLabel photo)
     {
 
         setSize(800, 600);
@@ -141,9 +148,26 @@ public class FreebiePostsFrame extends JFrame
             }
         });
 
+        GridLayout gridLayout = new GridLayout(2,3);
+        gridLayout.setHgap(5);
+        gridLayout.setVgap(5);
+        JPanel paramPanel = new JPanel(gridLayout);
+        paramPanel.setBorder(null);
+        paramPanel.setBackground(Color.white);
+
+        paramPanel.add(lat);
+        paramPanel.add(lon);
+        paramPanel.add(dateTime);
+        paramPanel.add(userLat);
+        paramPanel.add(userLon);
+        paramPanel.add(userDate);
+
         JButton postsButton = new JButton("View posts");
         postsButton.setSize(25, 45);
-
+        postsButton.setBackground(Color.white);
+        postsButton.setBorder(new StrokeBorder(new BasicStroke(1)));
+        postsButton.setMinimumSize(getMinimumSize());
+        postsButton.setFont(Font.getFont("Arial Narrow"));
         postsButton.addActionListener(e ->
         {
             if (allInputComplete())
@@ -155,23 +179,33 @@ public class FreebiePostsFrame extends JFrame
             }
         });
 
-        JPanel paramPanel = new JPanel(new GridLayout(2, 3));
-        paramPanel.add(lat);
-        paramPanel.add(lon);
-        paramPanel.add(dateTime);
-        paramPanel.add(userLat);
-        paramPanel.add(userLon);
-        paramPanel.add(userDate);
-
         JPanel topPanel = new JPanel(new BorderLayout());
         topPanel.add(paramPanel, BorderLayout.CENTER);
         topPanel.add(postsButton, BorderLayout.EAST);
 
         JPanel individualPost = new JPanel(new GridLayout(3, 1));
+        individualPost.setBackground(Color.white);
+
+        title.setHorizontalAlignment(SwingConstants.CENTER);
+        title.setSize(individualPost.getWidth(), individualPost.getHeight()/5);
+
+        description.setEditable(false);
+        description.setLineWrap(true);
+        description.setSize(individualPost.getWidth()/2,individualPost.getHeight()/3);
+        description.setMargin(new Insets(20, 20, 20, 20));
+
         individualPost.add(title);
         individualPost.add(description);
+        individualPost.add(photo);
 
         ListSelectionModel listSelectionModel = postTitles.getSelectionModel();
+        postTitles.setName("Posts");
+        postTitles.setDragEnabled(true);
+        postTitles.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        postTitles.setSelectionBackground(Color.lightGray);
+        postTitles.setFixedCellWidth(200);
+        //postTitles.setVisibleRowCount(20);
+        //TODO: make cells in list hoverable
         listSelectionModel.addListSelectionListener(new ListSelectionListener()
         {
             @Override
@@ -180,12 +214,22 @@ public class FreebiePostsFrame extends JFrame
                 if (!e.getValueIsAdjusting())
                 {
                     int postSelected = e.getLastIndex();
-                    controller.updatePost(postSelected);
+                    try
+                    {
+                        controller.updatePost(postSelected);
+                    }
+                    catch (MalformedURLException ex)
+                    {
+                        throw new RuntimeException(ex);
+                    }
                 }
             }
         });
 
         JPanel mainPanel = new JPanel(new BorderLayout());
+        mainPanel.setSize(500, 500);
+        mainPanel.setBackground(Color.white);
+        mainPanel.setBorder(new EtchedBorder(EtchedBorder.LOWERED));
         mainPanel.add(topPanel, BorderLayout.PAGE_START);
         mainPanel.add(postTitles, BorderLayout.WEST);
         mainPanel.add(individualPost, BorderLayout.CENTER);
