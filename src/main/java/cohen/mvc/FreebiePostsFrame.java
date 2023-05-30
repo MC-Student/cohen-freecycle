@@ -151,7 +151,7 @@ public class FreebiePostsFrame extends JFrame
             }
         });
 
-        GridLayout gridLayout = new GridLayout(2,3);
+        GridLayout gridLayout = new GridLayout(2, 3);
         gridLayout.setHgap(5);
         gridLayout.setVgap(5);
         JPanel paramPanel = new JPanel(gridLayout);
@@ -229,7 +229,11 @@ public class FreebiePostsFrame extends JFrame
             public void mouseEntered(MouseEvent e)
             {
                 photo.setCursor(new Cursor(Cursor.HAND_CURSOR));
-                photo.setBorder(new BasicBorders.ButtonBorder(Color.gray, Color.black, Color.blue, Color.lightGray));
+                photo.setBorder(new BasicBorders.ButtonBorder(
+                        Color.gray,
+                        Color.black,
+                        Color.blue,
+                        Color.lightGray));
             }
 
             @Override
@@ -249,12 +253,11 @@ public class FreebiePostsFrame extends JFrame
         individualPost.add(postText);
         individualPost.add(photo);
 
-        ListSelectionModel listSelectionModel = postTitles.getSelectionModel();
         postTitles.setName("Posts");
-        postTitles.setDragEnabled(true);
         postTitles.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         postTitles.setSelectionBackground(Color.lightGray);
         postTitles.setFixedCellWidth(200);
+        ListSelectionModel listSelectionModel = postTitles.getSelectionModel();
         listSelectionModel.addListSelectionListener(new ListSelectionListener()
         {
             @Override
@@ -262,7 +265,7 @@ public class FreebiePostsFrame extends JFrame
             {
                 if (!e.getValueIsAdjusting())
                 {
-                    int postSelected = e.getLastIndex();
+                    int postSelected = postTitles.getSelectedIndex();
                     try
                     {
                         controller.updatePost(postSelected);
@@ -283,7 +286,9 @@ public class FreebiePostsFrame extends JFrame
         mainPanel.add(postTitles, BorderLayout.WEST);
         mainPanel.add(individualPost, BorderLayout.CENTER);
 
-        controller.refreshPosts(userLat.getText(), userLon.getText(), getUtcDateParam());
+        controller.refreshPosts(userLat.getText(),
+                userLon.getText(),
+                getUtcDateParam());
 
         setContentPane(mainPanel);
     }
@@ -300,6 +305,3 @@ public class FreebiePostsFrame extends JFrame
                 & !userDate.getText().isBlank();
     }
 }
-
-//TODO: Add fields for lat/lon, display image, title, and description of post,
-// link image to url to open in browser

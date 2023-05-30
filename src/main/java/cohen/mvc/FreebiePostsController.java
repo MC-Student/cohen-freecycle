@@ -27,7 +27,7 @@ public class FreebiePostsController
     private final JLabel photo;
     private ArrayList<Post> allPosts;
 
-    private String photo_url;
+    private String photoUrl;
 
     @Inject
     public FreebiePostsController(FreebieService service,
@@ -59,7 +59,6 @@ public class FreebiePostsController
         {
             postTitles.add(new JLabel("Empty"));
         }
-
         else
         {
             String[] titlesArray = new String[allPosts.size()];
@@ -73,22 +72,26 @@ public class FreebiePostsController
 
             title.setText(allPosts.get(0).getTitle());
             description.setText(allPosts.get(0).getContent());
-            if (allPosts.get(0).getPhotos().size() > 0)
+            if (allPosts.get(0).getPhotos() != null)
             {
-                photo_url = allPosts.get(0).getPhotos().get(0).getUrl();
-                photo.setIcon(new ImageIcon(new URL(photo_url)));
+                photoUrl = allPosts.get(0).getPhotos().get(0).getUrl();
+                photo.setIcon(new ImageIcon(new URL(photoUrl)));
             }
         }
     }
 
     public void updatePost(int postSelected) throws MalformedURLException
     {
-        title.setText(allPosts.get(postSelected).getTitle());
-        description.setText(allPosts.get(postSelected).getContent());
-        if (allPosts.get(postSelected).getPhotos().size() > 0)
+        Post current = allPosts.get(postSelected);
+        title.setText(current.getTitle());
+        description.setText(current.getContent());
+        photoUrl = null;
+        photo.setIcon(null);
+        photo.setText(null);
+        if (current.getPhotos() != null)
         {
-            photo_url = allPosts.get(postSelected).getPhotos().get(0).getUrl();
-            photo.setIcon(new ImageIcon(new URL(photo_url)));
+            photoUrl = current.getPhotos().get(0).getUrl();
+            photo.setIcon(new ImageIcon(new URL(photoUrl)));
         }
         else
         {
@@ -103,36 +106,8 @@ public class FreebiePostsController
             Desktop desktop = Desktop.getDesktop();
             if (desktop.isSupported(Desktop.Action.BROWSE))
             {
-                desktop.browse(new URI(photo_url));
+                desktop.browse(new URI(photoUrl));
             }
         }
     }
 }
- /*
-
-private static boolean openWebpage(URL url) {
-    try {
-        return openWebpage(url.toURI());
-    } catch (URISyntaxException e) {
-        e.printStackTrace();
-    }
-    return false;
-}*/
-    /*private boolean openWebpage(URI uri)
-    {
-        Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;
-
-        if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE))
-        {
-            try
-            {
-                desktop.browse(uri);
-                return true;
-            }
-            catch (Exception e)
-            {
-                e.printStackTrace();
-            }
-        }
-        return false;
-    }*/
