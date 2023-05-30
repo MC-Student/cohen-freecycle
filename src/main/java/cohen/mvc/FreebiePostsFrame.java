@@ -13,7 +13,10 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -27,7 +30,7 @@ public class FreebiePostsFrame extends JFrame
     @Inject
     public FreebiePostsFrame(FreebiePostsController controller,
                              @Named("postTitles") JList<String> postTitles,
-                             @Named("title") JLabel title,
+                             @Named("title") JTextArea title,
                              @Named("description") JTextArea description,
                              @Named("photo") JLabel photo)
     {
@@ -183,19 +186,67 @@ public class FreebiePostsFrame extends JFrame
         topPanel.add(paramPanel, BorderLayout.CENTER);
         topPanel.add(postsButton, BorderLayout.EAST);
 
-        JPanel individualPost = new JPanel(new GridLayout(3, 1));
-        individualPost.setBackground(Color.white);
-
-        title.setHorizontalAlignment(SwingConstants.CENTER);
-        title.setSize(individualPost.getWidth(), individualPost.getHeight()/5);
+        title.setEditable(false);
+        title.setLineWrap(true);
+        title.setWrapStyleWord(true);
+        title.setSize(200, 100);
+        title.setMargin(new Insets(20, 20, 20, 20));
 
         description.setEditable(false);
         description.setLineWrap(true);
-        description.setSize(individualPost.getWidth()/2,individualPost.getHeight()/3);
+        description.setWrapStyleWord(true);
+        description.setSize(200, 100);
         description.setMargin(new Insets(20, 20, 20, 20));
 
-        individualPost.add(title);
-        individualPost.add(description);
+        photo.addMouseListener(new MouseListener()
+        {
+            @Override
+            public void mouseClicked(MouseEvent e)
+            {
+                try
+                {
+                    controller.openPhotoInBrowser();
+                }
+                catch (URISyntaxException | IOException ex)
+                {
+                    throw new RuntimeException(ex);
+                }
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e)
+            {
+
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e)
+            {
+
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e)
+            {
+                photo.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                photo.setBorder(new BasicBorders.ButtonBorder(Color.gray, Color.black, Color.blue, Color.lightGray));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e)
+            {
+                photo.setBorder(null);
+            }
+        });
+
+        JPanel postText = new JPanel(new BorderLayout());
+        postText.add(title, BorderLayout.WEST);
+        postText.add(description, BorderLayout.CENTER);
+
+        JPanel individualPost = new JPanel(new FlowLayout());
+        individualPost.setBackground(Color.white);
+
+        individualPost.add(postText);
         individualPost.add(photo);
 
         ListSelectionModel listSelectionModel = postTitles.getSelectionModel();
@@ -204,8 +255,6 @@ public class FreebiePostsFrame extends JFrame
         postTitles.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         postTitles.setSelectionBackground(Color.lightGray);
         postTitles.setFixedCellWidth(200);
-        //postTitles.setVisibleRowCount(20);
-        //TODO: make cells in list hoverable
         listSelectionModel.addListSelectionListener(new ListSelectionListener()
         {
             @Override

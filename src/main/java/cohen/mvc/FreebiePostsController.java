@@ -10,8 +10,10 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -19,18 +21,20 @@ public class FreebiePostsController
 {
     private final JList<String> postTitles;
     private final FreebieService service;
-    private final JLabel title;
+    private final JTextArea title;
     private final JTextArea description;
 
     private final JLabel photo;
     private ArrayList<Post> allPosts;
 
+    private String photo_url;
+
     @Inject
     public FreebiePostsController(FreebieService service,
-                                  @Named("title") JLabel title,
+                                  @Named("title") JTextArea title,
                                   @Named("description") JTextArea description,
-                                  @Named("postTitles") JList<String> postTitles,
-                                  @Named("photo") JLabel photo)
+                                  @Named("photo") JLabel photo,
+                                  @Named("postTitles") JList<String> postTitles)
     {
         this.service = service;
         this.title = title;
@@ -69,7 +73,11 @@ public class FreebiePostsController
 
             title.setText(allPosts.get(0).getTitle());
             description.setText(allPosts.get(0).getContent());
-            setPhoto(0);
+            if (allPosts.get(0).getPhotos().size() > 0)
+            {
+                photo_url = allPosts.get(0).getPhotos().get(0).getUrl();
+                photo.setIcon(new ImageIcon(new URL(photo_url)));
+            }
         }
     }
 
@@ -77,17 +85,30 @@ public class FreebiePostsController
     {
         title.setText(allPosts.get(postSelected).getTitle());
         description.setText(allPosts.get(postSelected).getContent());
-        photo.setIcon(setPhoto(postSelected));
+        if (allPosts.get(postSelected).getPhotos().size() > 0)
+        {
+            photo_url = allPosts.get(postSelected).getPhotos().get(0).getUrl();
+            photo.setIcon(new ImageIcon(new URL(photo_url)));
+        }
+        else
+        {
+            photo.setText("** no photos available **");
+        }
     }
 
-    public ImageIcon setPhoto(int index) throws MalformedURLException
+    public void openPhotoInBrowser() throws URISyntaxException, IOException
     {
-        String url = allPosts.get(index).getPhotos().get(index).getUrl();
-        ImageIcon icon = new ImageIcon(new URL(url));
-        Image origImage = icon.getImage();
-        Image scaledInstance = origImage.getScaledInstance(600, 800, java.awt.Image.SCALE_SMOOTH);
-        return new ImageIcon(scaledInstance); //this returns null because does not wait for image to load
-        /*
+        if (Desktop.isDesktopSupported())
+        {
+            Desktop desktop = Desktop.getDesktop();
+            if (desktop.isSupported(Desktop.Action.BROWSE))
+            {
+                desktop.browse(new URI(photo_url));
+            }
+        }
+    }
+}
+ /*
 
 private static boolean openWebpage(URL url) {
     try {
@@ -115,5 +136,3 @@ private static boolean openWebpage(URL url) {
         }
         return false;
     }*/
-    }
-}

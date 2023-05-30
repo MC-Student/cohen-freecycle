@@ -47,9 +47,9 @@ public class FreebieServiceModule
     @Provides
     @Named("title")
     @Singleton
-    public JLabel providesTitle()
+    public JTextArea providesTitle()
     {
-        return new JLabel();
+        return new JTextArea();
     }
 
     @Provides
