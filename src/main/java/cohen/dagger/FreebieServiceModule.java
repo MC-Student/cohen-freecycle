@@ -37,14 +37,6 @@ public class FreebieServiceModule
     }
 
     @Provides
-    @Named("allPosts")
-    @Singleton
-    public ArrayList<Post> providesAllPosts()
-    {
-        return new ArrayList<>();
-    }
-
-    @Provides
     @Named("title")
     @Singleton
     public JTextArea providesTitle()

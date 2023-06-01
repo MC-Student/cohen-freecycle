@@ -301,7 +301,7 @@ public class FreebiePostsFrame extends JFrame
     private boolean allInputComplete()
     {
         return !userLat.getText().isBlank()
-                & !userLon.getText().isBlank()
-                & !userDate.getText().isBlank();
+                && !userLon.getText().isBlank()
+                && !userDate.getText().isBlank();
     }
 }

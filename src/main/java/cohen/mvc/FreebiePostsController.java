@@ -70,11 +70,12 @@ public class FreebiePostsController
 
             postTitles.setListData(titlesArray);
 
-            title.setText(allPosts.get(0).getTitle());
-            description.setText(allPosts.get(0).getContent());
-            if (allPosts.get(0).getPhotos() != null)
+            Post firstPost = allPosts.get(0);
+            title.setText(firstPost.getTitle());
+            description.setText(firstPost.getContent());
+            if (firstPost.getPhotos() != null)
             {
-                photoUrl = allPosts.get(0).getPhotos().get(0).getUrl();
+                photoUrl = firstPost.getPhotos().get(0).getUrl();
                 photo.setIcon(new ImageIcon(new URL(photoUrl)));
             }
         }
@@ -85,9 +86,11 @@ public class FreebiePostsController
         Post current = allPosts.get(postSelected);
         title.setText(current.getTitle());
         description.setText(current.getContent());
+
         photoUrl = null;
         photo.setIcon(null);
         photo.setText(null);
+
         if (current.getPhotos() != null)
         {
             photoUrl = current.getPhotos().get(0).getUrl();
