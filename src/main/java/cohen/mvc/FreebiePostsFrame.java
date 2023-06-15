@@ -281,16 +281,20 @@ public class FreebiePostsFrame extends JFrame
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.setSize(500, 500);
         mainPanel.setBackground(Color.white);
-        mainPanel.setBorder(new EtchedBorder(EtchedBorder.LOWERED));
+        mainPanel.setBorder(new
+
+                EtchedBorder(EtchedBorder.LOWERED));
         mainPanel.add(topPanel, BorderLayout.PAGE_START);
         mainPanel.add(postTitles, BorderLayout.WEST);
         mainPanel.add(individualPost, BorderLayout.CENTER);
 
         controller.refreshPosts(userLat.getText(),
                 userLon.getText(),
+
                 getUtcDateParam());
 
         setContentPane(mainPanel);
+
     }
 
     private String getUtcDateParam()

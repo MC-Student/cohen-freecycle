@@ -71,6 +71,7 @@ public class FreebiePostsController
             postTitles.setListData(titlesArray);
 
             Post firstPost = allPosts.get(0);
+
             title.setText(firstPost.getTitle());
             description.setText(firstPost.getContent());
             if (firstPost.getPhotos() != null)
