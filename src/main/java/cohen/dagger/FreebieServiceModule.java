@@ -1,6 +1,7 @@
 package cohen.dagger;
 
 import cohen.FreebieService;
+import cohen.json.Post;
 import dagger.Module;
 import dagger.Provides;
 import retrofit2.Retrofit;
@@ -10,6 +11,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import javax.inject.Named;
 import javax.inject.Singleton;
 import javax.swing.*;
+import java.util.*;
 
 @Module
 public class FreebieServiceModule
@@ -27,10 +29,34 @@ public class FreebieServiceModule
     }
 
     @Provides
-    @Named("postList")
+    @Named("postTitles")
     @Singleton
-    public JTextArea providesPostList()
+    public JList<String> providesPostTitles()
+    {
+        return new JList<>();
+    }
+
+    @Provides
+    @Named("title")
+    @Singleton
+    public JTextArea providesTitle()
     {
         return new JTextArea();
+    }
+
+    @Provides
+    @Named("description")
+    @Singleton
+    public JTextArea providesDescription()
+    {
+        return new JTextArea();
+    }
+
+    @Provides
+    @Named("photo")
+    @Singleton
+    public JLabel providesPhoto()
+    {
+        return new JLabel();
     }
 }

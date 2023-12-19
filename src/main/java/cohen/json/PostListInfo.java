@@ -1,5 +1,6 @@
 package cohen.json;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PostListInfo
@@ -84,9 +85,9 @@ public class PostListInfo
         this.per_page = perPage;
     }
 
-    public List<Post> getPosts()
+    public ArrayList<Post> getPosts()
     {
-        return posts;
+        return (ArrayList<Post>) posts;
     }
 
     public void setPosts(List<Post> posts)
